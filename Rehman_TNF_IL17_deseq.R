@@ -19,6 +19,8 @@ colnames(Rehman_phenotypes) <- gsub(pattern = ":ch1",
                                     x = colnames(Rehman_phenotypes))
 Rehman_phenotypes$sample_id <- rownames(Rehman_phenotypes)
 
+# Scenario 2 - control vs IL-17+TNFa
+
 exp_samples <- rownames(Rehman_phenotypes[which(Rehman_phenotypes$disease=="non-CF"),])
 Rehman_exp_phenotypes <- Rehman_phenotypes[exp_samples, ]
 

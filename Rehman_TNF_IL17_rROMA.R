@@ -1,8 +1,7 @@
 library(rRoma)
 
-load("/Users/matthieu/ownCloud/Thèse/Systems Biology/project rROMA/Reviews/Rehman_exp_RNA_matrix_norm.Rda")
-
-load("/Users/matthieu/ownCloud/Thèse/Systems Biology/project rROMA/Reviews/Rehman_exp_sample_labels.Rda")
+load("./Rehman_IL17_TNFa_RNA_exp_matrix_norm.Rda")
+load("./Rehman_IL17_TNFa_sample_labels.Rda")
 
 Treatment <- Rehman_exp_coldata$Treatment
 names(Treatment) <- Rehman_exp_coldata$Simple_id
@@ -21,6 +20,9 @@ AllHall <- lapply(AllHall, function(x){
 set.seed(123)
 rRoma.output <- rRoma.R(Rehman_exp_RNA_matrix_norm, 
                         AllHall)
+
+save(rRoma.output,
+     file = "./Rehman_IL17_TNFa_rRoma_obj.Rdata")
 
 shifted.modules <- which(rRoma.output$ModuleMatrix[, "ppv Median Exp"] <= 0.05)
 

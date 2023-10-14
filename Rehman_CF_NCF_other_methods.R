@@ -237,7 +237,7 @@ colnames(zscore_output_df) <- gsub(pattern = "[.]",
                                    x = colnames(zscore_output_df))
 
 zscore_mycolors <- colorRampPalette(brewer.pal(3, "RdBu"))(50)
-zscore_pal <- colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = "RdBu")))(100)
+zscore_pal <- colorRampPalette(rev(RColorBrewer::brewer.pal(n = 7, name = "PiYG")))(100)
 zscore_myBreaks <- seq(min(zscore_output_df), max(zscore_output_df), length.out = 100)
 
 zscore_heatmap <- pheatmap(zscore_output_df,
