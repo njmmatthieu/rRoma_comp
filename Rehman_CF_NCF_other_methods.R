@@ -25,6 +25,9 @@ CF_samples <- sample_labels %>%
 non_CF_samples <- sample_labels %>% 
   filter(Type=="non_CF") %>%
   pull(CF_sample_id)
+non_CF_samples <- gsub(x = non_CF_samples,
+                    pattern = "[_]",
+                    replacement = "-")
 
 # Pheatmap colors
 
@@ -56,12 +59,12 @@ colnames(expr.matrix) <- sapply(colnames(expr.matrix), function(id){
   return(CF_id)
 })
 
-gene.pca <- prcomp(t(expr.matrix),
-       center = T)
-
-gene.pca.plot <- autoplot(gene.pca,
-                          data = t(expr.matrix),
-                          label = T)
+# gene.pca <- prcomp(t(expr.matrix),
+#        center = T)
+# 
+# gene.pca.plot <- autoplot(gene.pca,
+#                           data = t(expr.matrix),
+#                           label = T)
 
 
 
@@ -103,12 +106,12 @@ plage_heatmap <- pheatmap(plage_output_df,
          breaks = myBreaks,
          border_color = "NA")
 
-png(filename = "./Rehman_CF_NCF_plage_heatmap.png", 
-    width = 1800, 
-    height = 1500, 
-    res = 150)
-plage_heatmap
-dev.off()
+# png(filename = "./Rehman_CF_NCF_plage_heatmap.png", 
+#     width = 1800, 
+#     height = 1500, 
+#     res = 150)
+# plage_heatmap
+# dev.off()
 
 
 
@@ -123,7 +126,7 @@ plage_t_test_p_values <- apply(X = plage_output_df,
 plage_adjusted_p_values <- p.adjust(plage_t_test_p_values, 
                               method = "fdr")
 
-names(plage_adjusted_p_values[plage_adjusted_p_values < 0.05])
+length(plage_adjusted_p_values[plage_adjusted_p_values < 0.05])
 length(plage_adjusted_p_values < 0.05)
 
 # GSVA
@@ -149,12 +152,12 @@ gsva_heatmap <- pheatmap(gsva_output_df,
          breaks = myBreaks,
          border_color = "NA")
 
-png(filename = "./Rehman_CF_NCF_gsva_heatmap.png", 
-    width = 1800, 
-    height = 1500, 
-    res = 150)
-gsva_heatmap
-dev.off()
+# png(filename = "./Rehman_CF_NCF_gsva_heatmap.png", 
+#     width = 1800, 
+#     height = 1500, 
+#     res = 150)
+# gsva_heatmap
+# dev.off()
 
 # Perform t-tests for each gene
 gsva_t_test_p_values <- apply(X = gsva_output_df,
@@ -169,7 +172,7 @@ gsva_t_test_p_values <- apply(X = gsva_output_df,
 gsva_adjusted_p_values <- p.adjust(gsva_t_test_p_values, 
                               method = "fdr")
 
-names(gsva_adjusted_p_values[gsva_adjusted_p_values < 0.05])
+length(gsva_adjusted_p_values[gsva_adjusted_p_values < 0.05])
 table(gsva_adjusted_p_values < 0.05)
 
 pheatmap(gsva_output_df)
@@ -196,12 +199,12 @@ ssgsea_heatmap <- pheatmap(ssgsea_output_df,
          breaks = myBreaks,
          border_color = "NA")
 
-png(filename = "./Rehman_CF_NCF_ssgsea_heatmap.png", 
-    width = 1800, 
-    height = 1500, 
-    res = 150)
-ssgsea_heatmap
-dev.off()
+# png(filename = "./Rehman_CF_NCF_ssgsea_heatmap.png", 
+#     width = 1800, 
+#     height = 1500, 
+#     res = 150)
+# ssgsea_heatmap
+# dev.off()
 
 # Perform t-tests for each gene
 ssgsea_t_test_p_values <- apply(X = ssgsea_output_df,
@@ -247,12 +250,12 @@ zscore_heatmap <- pheatmap(zscore_output_df,
          breaks = zscore_myBreaks,
          border_color = "NA")
 
-png(filename = "./Rehman_CF_NCF_zscore_heatmap.png", 
-    width = 1800, 
-    height = 1500, 
-    res = 150)
-zscore_heatmap
-dev.off()
+# png(filename = "./Rehman_CF_NCF_zscore_heatmap.png", 
+#     width = 1800, 
+#     height = 1500, 
+#     res = 150)
+# zscore_heatmap
+# dev.off()
 
 # Perform t-tests for each gene
 zscore_t_test_p_values <- apply(X = zscore_output_df,
@@ -267,7 +270,7 @@ zscore_t_test_p_values <- apply(X = zscore_output_df,
 zscore_adjusted_p_values <- p.adjust(zscore_t_test_p_values, 
                                      method = "fdr")
 
-names(zscore_adjusted_p_values[zscore_adjusted_p_values < 0.05])
+length(zscore_adjusted_p_values[zscore_adjusted_p_values < 0.05])
 table(zscore_adjusted_p_values < 0.05)
 
 pheatmap(zscore_output_df)
@@ -298,10 +301,25 @@ rRoma_heatmap <- pheatmap(rROMA_output_df,
                            breaks = myBreaks,
                            border_color = "NA")
 
-png(filename = "./Rehman_CF_NCF_rRoma_heatmap.png", 
-    width = 1800, 
-    height = 1500, 
-    res = 150)
-rRoma_heatmap
-dev.off()
+# Perform t-tests for each gene
+rROMA_t_test_p_values <- apply(X = rROMA_output_df,
+                                MARGIN = 1,
+                                FUN = function(x) {
+                                  # print(x[CF_samples])
+                                  # print(x[non_CF_samples])
+                                  t_test_result <- t.test(x[CF_samples], x[non_CF_samples])
+                                  return(t_test_result$p.value)
+                                })
+
+rROMA_adjusted_p_values <- p.adjust(rROMA_t_test_p_values, 
+                                     method = "fdr")
+
+length(rROMA_adjusted_p_values[rROMA_adjusted_p_values < 0.05])
+
+# png(filename = "./Rehman_CF_NCF_rRoma_heatmap.png", 
+#     width = 1800, 
+#     height = 1500, 
+#     res = 150)
+# rRoma_heatmap
+# dev.off()
 
