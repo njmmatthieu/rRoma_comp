@@ -2,7 +2,7 @@ Repository contaning data and codes to reproduce the comparison of sample-wise m
 
 # Pathway database
 
-GMT file: h.all.v2023.1.Hs.symbols.gmt
+- GMT file: h.all.v2023.1.Hs.symbols.gmt
 
 # Scenario #1: comparison of CF and healthy control samples
 
